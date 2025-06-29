@@ -46,6 +46,13 @@ const NovaPesquisa = (props) => {
         const docPesquisa = {
             nome: nome,
             data: data,
+            respostas: {
+                excelente: 0,
+                bom: 0,
+                neutro: 0,
+                ruim: 0,
+                pessimo: 0
+            }
         };
 
         try {
