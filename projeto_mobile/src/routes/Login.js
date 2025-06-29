@@ -7,6 +7,8 @@ import Input from '../components/Input'
 import Botao from '../components/Botao'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth_module } from '../firebase/config'
+import { useDispatch } from 'react-redux'
+import { reducerSetUsuario } from '../../redux/usuarioSlice'
 
 const Login = (props) => {
     const [usuario, setUsuario] = useState("")
@@ -46,6 +48,11 @@ const Login = (props) => {
             )
         }
     }
+    const dispatch = useDispatch()
+
+    const atribuirEmail = () => {
+        dispatch(reducerSetUsuario({ email: usuario }))
+    }
 
     return (
         <View style={estilos.viewMae}>
@@ -60,7 +67,10 @@ const Login = (props) => {
                     <Input label="Senha" txt={senha} setTxt={setSenha} placeholder="******" color="grey" secureTextEntry onBlur={validaSenha}/>
                     {!validadeSenha && <Text style={estilos.erro}>Senha deve ter pelo menos 6 caracteres</Text>}
                 </View>
-                <Botao texto="Entrar" cor="#37BD6D" tamanho={32} onPress={() => authUsuario()} />
+                <Botao texto="Entrar" cor="#37BD6D" tamanho={32} onPress={() => {
+                    atribuirEmail()
+                    authUsuario()
+                }} />
             </View>
             <View style={estilos.botoes}>
                 <Botao texto="Criar minha conta" cor="#419ED7" tamanho={25} onPress={() => navega("NovaConta")}/>

@@ -1,5 +1,5 @@
 //Tela para modificar pesquisa
-import { View, StyleSheet, Modal, Pressable, Text, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, Modal, Pressable, Text, TouchableOpacity, Image } from 'react-native'
 import { useState, useEffect } from 'react'
 import { getFirestore, doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'
 import { app } from '../firebase/config'
@@ -7,19 +7,23 @@ import Input from '../components/Input'
 import InputImagem from '../components/InputImagem'
 import Botao from '../components/Botao'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import ImageResizer from 'react-native-image-resizer'
+import { launchImageLibrary } from 'react-native-image-picker'
+import { useSelector } from 'react-redux'
 
 
 const ModificarPesquisa = ({ route, navigation }) => {
     const [nome, setNome] = useState()
     const [data, setData] = useState()
     const [visuModal, setVisuModal] = useState(false)
+    const [imagem, setImagem] = useState()
 
-    const id = route?.params?.id
+    const id = useSelector((state) => state.pesquisa.id)
     const db = getFirestore(app)
 
     const changePesquisa = () => {
         const pesquisaRef = doc(db, "pesquisa", id)
-        updateDoc(pesquisaRef, { nome, data })
+        updateDoc(pesquisaRef, { nome, data, imagem })
         navigation.navigate("DrawerNavigator")
     }
 
@@ -35,13 +39,44 @@ const ModificarPesquisa = ({ route, navigation }) => {
         getDoc(docRef).then((docSnap) => {
             if (docSnap.exists()) {
                 const dados = docSnap.data()
+                console.log(dados.imagem)
+
                 setNome(dados.nome)
                 setData(dados.data)
+                setImagem(dados.imagem)
             }
         })
     }, [id])
 
     const mostraPopup = () => setVisuModal(!visuModal)
+
+    const convertURIToBase64 = async (uri) => {
+        const resizeImage = await ImageResizer.createResizedImage(
+            uri,
+            700,
+            700,
+            'JPEG',
+            100
+        );
+
+        const imageUri = await fetch(resizeImage.uri)
+        const imagemBlob = await imageUri.blob()
+        
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImagem(reader.result)
+        };
+
+        reader.readAsDataURL(imagemBlob);
+    }
+
+    const pickImage = () => {
+        launchImageLibrary({ mediaType: 'photo' }, (result) => {
+            if (result.assets && !result.didCancel) {
+                convertURIToBase64(result.assets[0]?.uri);
+            }
+        })
+    }
 
     return (
         <View style={estilos.viewMae}>
@@ -50,10 +85,12 @@ const ModificarPesquisa = ({ route, navigation }) => {
                     <Input label="Nome" txt={nome} setTxt={setNome} placeholder="SECOMP 2023" color="grey" />
                     <Input label="Data" txt={data} setTxt={setData} placeholder="10/10/2023" color="grey" />
                     <Icon style={estilos.icone} name="calendar-month-outline" size={40} color="grey" />
-                    <InputImagem
-                        label="Imagem"
-                        image="https://imgs.search.brave.com/Cneu7QLFmezkZ3jZEtqfv-m75wfiR0a3Kpvlr_UTACQ/rs:fit:500:0:0/g:ce/aHR0cHM6Ly93d3cu/aGFyZHdhcmUuY29t/LmJyL3dwLWNvbnRl/bnQvdXBsb2Fkcy9z/dGF0aWMvd3AvMjAy/Mi8wMS8yOC8xLTQu/anBn"
-                    />
+                    <View style={estilos.imageContainer}>
+                        <Pressable style={estilos.imagemButton} onPress= { pickImage }>
+                            <Text>Escolha uma imagem</Text>
+                        </Pressable>
+                        {imagem && <Image source={{ uri: imagem }} style={estilos.imagem}/>}
+                    </View>
                 </View>
                 <Botao texto="SALVAR" cor="#37BD6D" tamanho={35} onPress={changePesquisa} />
             </View>
@@ -154,6 +191,21 @@ const estilos = StyleSheet.create({
         position: "absolute",
         right: 10,
         top: 108
+    },
+    imagemButton: {
+        backgroundColor: "white",
+        height: 50,
+        width: 200,
+        justifyContent: 'center'
+    },
+    imageContainer: {
+        width: '100%',
+        flexDirection: 'row'
+    },
+    imagem: {
+        marginLeft: 20,
+        height: 100,
+        width: 100
     }
 })
 

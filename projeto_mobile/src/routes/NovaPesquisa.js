@@ -1,13 +1,14 @@
 //Tela de cadastro de nova pesquisa
 //Imports
-import { View, StyleSheet, Text, TextInput, ActivityIndicator, Alert } from 'react-native'
+import { View, StyleSheet, Text, TextInput, ActivityIndicator, Alert, Pressable, Image } from 'react-native'
 import { useState } from 'react'
 import Input from '../components/Input'
-import InputImagem from '../components/InputImagem'
 import Botao from '../components/Botao'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { getFirestore, collection, addDoc, doc, updateDoc} from "firebase/firestore";
 import { app } from '../firebase/config'
+import { launchImageLibrary } from 'react-native-image-picker'
+import ImageResizer from 'react-native-image-resizer'
 
 
 const NovaPesquisa = (props) => {
@@ -15,6 +16,7 @@ const NovaPesquisa = (props) => {
     const [data, setData] = useState("")
     const [validadeNome, setValidadeNome] = useState(true)
     const [validadeData, setValidadeData] = useState(true)
+    const [imagem, setImagem] = useState()
 
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(null)
@@ -52,7 +54,8 @@ const NovaPesquisa = (props) => {
                 neutro: 0,
                 ruim: 0,
                 pessimo: 0
-            }
+            },
+            imagem: imagem
         };
 
         try {
@@ -81,6 +84,34 @@ const NovaPesquisa = (props) => {
         }
     }
 
+    const convertURIToBase64 = async (uri) => {
+        const resizeImage = await ImageResizer.createResizedImage(
+            uri,
+            700,
+            700,
+            'JPEG',
+            100
+        );
+
+        const imageUri = await fetch(resizeImage.uri)
+        const imagemBlob = await imageUri.blob()
+        
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImagem(reader.result)
+        };
+
+        reader.readAsDataURL(imagemBlob);
+    }
+
+    const pickImage = () => {
+        launchImageLibrary({ mediaType: 'photo' }, (result) => {
+            if (result.assets && !result.didCancel) {
+                convertURIToBase64(result.assets[0]?.uri);
+            }
+        })
+    }
+
     return (
         <View style={estilos.viewMae}>
             <View style={estilos.formulario}>
@@ -98,10 +129,12 @@ const NovaPesquisa = (props) => {
                         {!validadeData && <Text style={estilos.erro}>Preencha a data</Text>}
                     </View>
                     
-                    <InputImagem label="Imagem"
-                        image={"https://img.freepik.com/fotos-gratis/fundo-branco_23-2147730801.jpg"}
-                        onPress={() => { console.log("Imagem inserida") }}
-                    />
+                    <View style={estilos.imageContainer}>
+                        <Pressable style={estilos.imagemButton} onPress= { pickImage }>
+                            <Text>Escolha uma imagem</Text>
+                        </Pressable>
+                        {imagem && <Image source={{ uri: imagem }} style={estilos.imagem}/>}
+                    </View>
                 </View>
 
                 {error && <Text style={estilos.erroGeral}>{error}</Text>}
@@ -161,6 +194,21 @@ const estilos = StyleSheet.create({
         fontSize: 16,
         textAlign: 'center',
         marginTop: 15,
+    },
+    imagemButton: {
+        backgroundColor: "white",
+        height: 50,
+        width: 200,
+        justifyContent: 'center'
+    },
+    imageContainer: {
+        width: '100%',
+        flexDirection: 'row'
+    },
+    imagem: {
+        marginLeft: 20,
+        height: 100,
+        width: 100
     }
 })
 

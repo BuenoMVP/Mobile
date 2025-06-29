@@ -1,15 +1,24 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { useDispatch } from 'react-redux'
+import { reducerSetPesquisa } from '../../redux/pesquisaSlice'
 
 const Card = (props) => {
     const imagem = props.pesq.imagem
     const id = props.pesq.id
+
+    const dispatch = useDispatch()
+
+    const atribuirId = () => {
+        dispatch(reducerSetPesquisa({ id: props.pesq.id }))
+    }
 
     return (
         <View style={estilos.view}>
             <TouchableOpacity 
                 style={estilos.botao} 
                 onPress={() => {
-                    props.navigation.navigate("AcoesPesquisa", { id: props.pesq.id })
+                    atribuirId()
+                    props.navigation.navigate("AcoesPesquisa")
                 }}>
                 <Image style={estilos.imagem} source={{ uri: imagem }} />
                 <Text style={estilos.titulo}>{props.pesq.titulo}</Text>

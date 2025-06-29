@@ -4,11 +4,12 @@ import {useEffect, useState} from 'react';
 import {doc, getFirestore, increment, updateDoc} from 'firebase/firestore';
 import {app} from '../firebase/config';
 import {buscarDadosPesquisa} from '../utils/dadosRelatorio';
+import { useSelector } from 'react-redux'
 
 const Coleta = ({route, navigation}) => {
   const [nome, setNome] = useState('');
   const [error, setError] = useState(null);
-  const id = route?.params?.id;
+  const id = useSelector((state) => state.pesquisa.id)
   const db = getFirestore(app);
 
   const coletarDados = resposta => {
@@ -38,7 +39,7 @@ const Coleta = ({route, navigation}) => {
   return (
     <View style={estilos.viewMae}>
       <View>
-        <Text style={estilos.texto}>O que você acho do {nome}?</Text>
+        <Text style={estilos.texto}>O que você achou do {nome}?</Text>
       </View>
       <View style={estilos.view}>
         <BotaoColeta

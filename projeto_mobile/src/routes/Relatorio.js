@@ -14,6 +14,7 @@ import {
   prepararDadosGrafico,
   buscarDadosPesquisa,
 } from '../utils/dadosRelatorio';
+import { useSelector } from 'react-redux'
 
 const Relatorio = ({route}) => {
   const [dadosPesquisa, setDadosPesquisa] = useState({
@@ -26,7 +27,7 @@ const Relatorio = ({route}) => {
   const [nome, setNome] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const id = route?.params?.id;
+  const id = useSelector((state) => state.pesquisa.id)
 
   useEffect(() => {
     const carregarDados = async () => {

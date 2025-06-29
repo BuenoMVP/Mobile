@@ -2,13 +2,15 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native"
 import { Drawer } from "react-native-paper"
 import { DrawerContentScrollView, DrawerItem, DrawerItemList } from "@react-navigation/drawer"
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { useSelector } from "react-redux"
 
 const CustomDrawer = (props) => {
+    const email = useSelector((state) => state.usuario.email)
     return (
         <DrawerContentScrollView justifyContent='space-between' style={{height: "100%"}}>
             <View>
                 <Drawer.Section showDivider="false" theme={{colors: {primary: "red"}}} style={estilos.viewMae}>
-                    <Text style={estilos.texto}>usuario@dominio.com</Text>
+                    <Text style={estilos.texto}>{email}</Text>
                 </Drawer.Section>
                 <View flex={75} paddingTop={10} >
                     <DrawerItemList {...props} style={estilos.texto} />
