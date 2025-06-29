@@ -4,12 +4,14 @@ import { View, StyleSheet} from 'react-native'
 import ItemAcao from '../components/ItemAcao'
 
 //Aplicação
-const AcoesPesquisa = (props) => {
+const AcoesPesquisa = ({ route, navigation }) => {
+    const id = route?.params?.id
+
     return (
         <View style={estilos.viewMae}>
-            <ItemAcao texto="Modificar" cor="white" icone="file-document-edit-outline" tela="ModificarPesquisa" navigation={props.navigation} />
-            <ItemAcao texto="Coletar Dados" cor="white" icone="checkbox-multiple-outline" tela="Coleta" navigation={props.navigation} />
-            <ItemAcao texto="Relatório" cor="white" icone="checkbox-blank-circle-outline" tela="Relatorio" navigation={props.navigation} />
+            <ItemAcao id={id} texto="Modificar" cor="white" icone="file-document-edit-outline" tela="ModificarPesquisa" navigation={navigation} />
+            <ItemAcao id={id} texto="Coletar Dados" cor="white" icone="checkbox-multiple-outline" tela="Coleta" navigation={navigation} />
+            <ItemAcao id={id} texto="Relatório" cor="white" icone="checkbox-blank-circle-outline" tela="Relatorio" navigation={navigation} />
         </View>
     )
 }

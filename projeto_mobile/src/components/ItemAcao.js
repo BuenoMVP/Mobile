@@ -3,7 +3,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const ItemAcao = (props) => {
     return (
-        <Pressable style={estilos.botao} onPress={() => {props.navigation.navigate(props.tela)}} >
+        <Pressable style={estilos.botao} onPress={() => {props.navigation.navigate(props.tela, {id: props.id})}} >
             <View style={estilos.view}>
                 <Icon name={props.icone} size={90} color={props.cor} />
                 <Text style={estilos.texto}>{props.texto}</Text>
