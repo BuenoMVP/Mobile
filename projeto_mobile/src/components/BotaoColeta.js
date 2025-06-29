@@ -5,7 +5,7 @@ const BotaoColeta = (props) => {
     return (
         <Pressable
             style={estilos.view}
-            onPress={() => {props.navigation.navigate("AgradecimentoParticipacao")}} >
+            onPress={props.onPress}>
             <Icon name={props.icone} size={90} color={props.cor} />
             <Text style={estilos.texto}>{props.texto}</Text>
         </Pressable>
