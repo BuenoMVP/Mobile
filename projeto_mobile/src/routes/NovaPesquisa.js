@@ -6,7 +6,7 @@ import Input from '../components/Input'
 import InputImagem from '../components/InputImagem'
 import Botao from '../components/Botao'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { getFirestore, collection, addDoc} from "firebase/firestore";
+import { getFirestore, collection, addDoc, doc, updateDoc} from "firebase/firestore";
 import { app } from '../firebase/config'
 
 
@@ -16,14 +16,12 @@ const NovaPesquisa = (props) => {
     const [validadeNome, setValidadeNome] = useState(true)
     const [validadeData, setValidadeData] = useState(true)
 
-    // Estados para feedback visual
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(null)
 
     const db = getFirestore(app);
     const pesquisaCollection = collection(db, "pesquisa")
 
-    // ---> INÍCIO DA SUA LÓGICA DE VALIDAÇÃO ORIGINAL <---
     const validaNome = () => {
         if (!nome.trim()) {
             setValidadeNome(false)
@@ -39,17 +37,14 @@ const NovaPesquisa = (props) => {
             setValidadeData(true)
         }
     }
-    // ---> FIM DA SUA LÓGICA DE VALIDAÇÃO ORIGINAL <---
 
 
-    // Função que tenta enviar os dados para o Firebase
     const addPesquisa = async () => {
-        setIsLoading(true) // Ativa o carregamento
-        setError(null)     // Limpa erros antigos
+        setIsLoading(true)
+        setError(null)
         
         const docPesquisa = {
             nome: nome,
-            // Salva a data como Timestamp se a conversão for bem-sucedida, senão null
             data: data,
         };
 
@@ -60,10 +55,10 @@ const NovaPesquisa = (props) => {
             Alert.alert("Sucesso!", "Pesquisa cadastrada.");
             props.navigation.navigate("DrawerNavigator");
         } catch (e) {
-            console.error("🔥 Erro ao adicionar documento:", e);
+            console.error("Erro ao adicionar documento:", e);
             setError("Falha ao cadastrar. Verifique sua conexão e as regras do Firebase.");
         } finally {
-            setIsLoading(false); // Desativa o carregamento, independente do resultado
+            setIsLoading(false);
         }
     };
 
@@ -72,7 +67,7 @@ const NovaPesquisa = (props) => {
         validaData();
 
         if (nome.trim() && data.trim()) {
-            addPesquisa();
+            addPesquisa().then(props.navigation.navigate("DrawerNavigator"))
         } else {
             console.log("Cadastro bloqueado pela validação.");
             setError("Preencha todos os campos corretamente.");
@@ -113,6 +108,7 @@ const NovaPesquisa = (props) => {
         </View>
     )
 }
+
 
 const estilos = StyleSheet.create({
     viewMae: {

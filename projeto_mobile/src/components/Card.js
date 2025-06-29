@@ -1,13 +1,17 @@
-import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native'
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
 
 const Card = (props) => {
     const imagem = props.pesq.imagem
+    const id = props.pesq.id
+
     return (
         <View style={estilos.view}>
             <TouchableOpacity 
-            style={estilos.botao} 
-            onPress={() => {props.navigation.navigate("AcoesPesquisa")}}>
-                <Image style={estilos.imagem} source={{uri: imagem}}/>
+                style={estilos.botao} 
+                onPress={() => {
+                    props.navigation.navigate("AcoesPesquisa", { id: props.pesq.id })
+                }}>
+                <Image style={estilos.imagem} source={{ uri: imagem }} />
                 <Text style={estilos.titulo}>{props.pesq.titulo}</Text>
                 <Text style={estilos.data}>{props.pesq.data}</Text>
             </TouchableOpacity>
@@ -15,16 +19,17 @@ const Card = (props) => {
     )
 }
 
-const estilos = StyleSheet.create ({
-    view:{
+
+const estilos = StyleSheet.create({
+    view: {
         backgroundColor: 'white',
         justifyContent: "center",
         alignItems: "center",
-        width: 230, 
+        width: 230,
         height: 200,
         borderRadius: 10
     },
-    titulo:{
+    titulo: {
         fontFamily: 'AveriaLibre-Regular',
         color: '#3F92C5',
         fontSize: 30,
@@ -36,18 +41,15 @@ const estilos = StyleSheet.create ({
         fontSize: 20,
         textAlign: 'center'
     },
-    botao:{
-        color: 'white',
-        fontSize: 16,
-        width: "100%", 
+    botao: {
+        width: "100%",
         height: "100%",
-        textAlign: 'center',
         justifyContent: "center"
     },
     imagem: {
         width: 120,
         height: 120,
-        marginLeft: "24%",
+        alignSelf: "center"
     }
 })
 
