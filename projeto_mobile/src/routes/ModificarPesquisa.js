@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { getFirestore, doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'
 import { app } from '../firebase/config'
 import Input from '../components/Input'
-import InputImagem from '../components/InputImagem'
 import Botao from '../components/Botao'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import ImageResizer from 'react-native-image-resizer'
@@ -12,7 +11,7 @@ import { launchImageLibrary } from 'react-native-image-picker'
 import { useSelector } from 'react-redux'
 
 
-const ModificarPesquisa = ({ route, navigation }) => {
+const ModificarPesquisa = ({ navigation }) => {
     const [nome, setNome] = useState()
     const [data, setData] = useState()
     const [visuModal, setVisuModal] = useState(false)

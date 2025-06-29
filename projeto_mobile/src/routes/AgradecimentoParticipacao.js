@@ -3,12 +3,11 @@
 import { View, Text, StyleSheet } from 'react-native'
 
 const AgradecimentoParticipacao = (props) => {
-    const id = props.route?.params?.id
     const seconds = 3
     return (
         <View style={estilos.viewMae}>
             <Text style={estilos.texto}>Obrigado por participar da pesquisa!</Text>
-            <Text style={estilos.texto} onload={setTimeout(() => {props.navigation.navigate('Coleta', { id })}, seconds*1000)} >Aguardamos você no próximo ano!</Text>
+            <Text style={estilos.texto} onload={setTimeout(() => {props.navigation.navigate('Coleta')}, seconds*1000)} >Aguardamos você no próximo ano!</Text>
         </View>
     )
 }

@@ -6,7 +6,7 @@ import {app} from '../firebase/config';
 import {buscarDadosPesquisa} from '../utils/dadosRelatorio';
 import { useSelector } from 'react-redux'
 
-const Coleta = ({route, navigation}) => {
+const Coleta = ({navigation}) => {
   const [nome, setNome] = useState('');
   const [error, setError] = useState(null);
   const id = useSelector((state) => state.pesquisa.id)

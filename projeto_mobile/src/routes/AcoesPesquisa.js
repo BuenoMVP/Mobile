@@ -2,10 +2,11 @@
 //Imports
 import { View, StyleSheet} from 'react-native'
 import ItemAcao from '../components/ItemAcao'
+import { useSelector } from 'react-redux'
 
 //Aplicação
-const AcoesPesquisa = ({ route, navigation }) => {
-    const id = route?.params?.id
+const AcoesPesquisa = ({ navigation }) => {
+    const id = useSelector((state) => state.pesquisa.id)
 
     return (
         <View style={estilos.viewMae}>

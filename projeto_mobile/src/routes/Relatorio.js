@@ -16,7 +16,7 @@ import {
 } from '../utils/dadosRelatorio';
 import { useSelector } from 'react-redux'
 
-const Relatorio = ({route}) => {
+const Relatorio = ({}) => {
   const [dadosPesquisa, setDadosPesquisa] = useState({
     excelente: 0,
     bom: 0,
