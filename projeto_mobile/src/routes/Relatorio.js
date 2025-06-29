@@ -77,6 +77,18 @@ const Relatorio = ({route}) => {
     );
   }
 
+  if (totalRespostas === 0) {
+    return (
+      <View style={estilos.emptyContainer}>
+        <Text style={estilos.emptyIcon}>📊</Text>
+        <Text style={estilos.emptyTitle}>Nada por aqui</Text>
+        <Text style={estilos.emptyMessage}>
+          Esta pesquisa ainda não recebeu nenhuma resposta. Utilize o botão de coleta para começar a coletar dados!
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <ScrollView style={estilos.container}>
       <View style={estilos.viewMae}>
@@ -155,6 +167,31 @@ const estilos = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 24,
     marginBottom: 8,
+  },
+  emptyContainer: {
+    flex: 1,
+    backgroundColor: '#372775',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 32,
+  },
+  emptyIcon: {
+    fontSize: 80,
+    marginBottom: 20,
+  },
+  emptyTitle: {
+    color: '#FFFFFF',
+    fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  emptyMessage: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    textAlign: 'center',
+    lineHeight: 24,
+    marginBottom: 24,
   },
   viewMae: {
     backgroundColor: '#372775',
