@@ -75,7 +75,7 @@ const ModificarPesquisa = ({ route, navigation }) => {
                         <View style={estilos.viewBotao}>
                             <TouchableOpacity
                                 style={estilos.botaoPopup}
-                                onPress={() => {deletarPesquisa}}>
+                                onPress={() => {deletarPesquisa()}}>
                                 <Text style={estilos.texto}>SIM</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
